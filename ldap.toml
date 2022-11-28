@@ -1,0 +1,56 @@
+[[servers]]
+
+# Ldap server host (specify multiple hosts space separated)
+host = "vsldap.vsazure.com"
+
+# Default port is 389 or 636 if use_ssl = true
+port = 389
+
+# Set to true if LDAP server should use an encrypted TLS connection (either with STARTTLS or LDAPS)
+use_ssl = false
+
+# If set to true, use LDAP with STARTTLS instead of LDAPS
+start_tls = false
+
+# set to true if you want to skip SSL cert validation
+ssl_skip_verify = false
+
+# set to the path to your root CA certificate or leave unset to use system defaults
+# root_ca_cert = "/path/to/certificate.crt"
+# Authentication against LDAP servers requiring client certificates
+# client_cert = "/path/to/client.crt"
+# client_key = "/path/to/client.key"
+
+# Search user bind dn
+bind_dn = "CN=VSDJira,OU=Generic IDs,DC=Limited,DC=brands,DC=com"
+
+# Search user bind password
+# If the password contains # or ; you have to wrap it with triple quotes. Ex """#password;"""
+bind_password = "U7$655%*UG"
+
+# User search filter, for example "(cn=%s)" or "(sAMAccountName=%s)" or "(uid=%s)"
+# Allow login from email or username, example "(|(sAMAccountName=%s)(userPrincipalName=%s))"
+#search_filter = "(&(objectClass=user)(sAMAccountName={0}))"
+search_filter = "(|(sAMAccountName=%s)(userPrincipalName=%s))"
+
+# An array of base dns to search through
+search_base_dns = ["DC=Limited,DC=brands,DC=com"]
+
+# Specify names of the LDAP attributes your LDAP uses
+[servers.attributes]
+member_of = "memberOf"
+username = "sAMAccountName"
+
+## Group search filter, to retrieve the groups of which the user is a member (only set if memberOf attribute is not available)
+group_search_filter = "(&(objectClass=posixGroup)(memberUid=%s))"
+
+## An array of the base DNs to search through for groups. Typically uses ou=groups
+group_search_base_dns = ["DC=Limited,DC=brands,DC=com"]
+
+## the %s in the search filter will be replaced with the attribute defined below
+group_search_filter_user_attribute = "uid"
+
+[[servers.group_mappings]]
+group_dn = "CN=VSD Newmedia Tech Svcs,OU=Distribution Lists,OU=Microsoft Exchange,DC=Limited,DC=brands,DC=com"
+org_role = "Admin"
+grafana_admin = true # Available in Grafana v5.3 and above
